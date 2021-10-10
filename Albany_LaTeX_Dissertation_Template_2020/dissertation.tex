@@ -136,15 +136,15 @@
 \begin{document}
  
 \titlepage     
-\dedication   %optional
+% \dedication   %optional
 
-\include{abstract}  %The heading for abstract, acknowledgment, introduction, chapter, etc.
-\include{ack}       %is put in the included file, followed by the content.
+% \include{abstract}  %The heading for abstract, acknowledgment, introduction, chapter, etc.
+\include{ack}
+%is put in the included file, followed by the content.
 
 \tableofcontents        
-\listoffigures
 
-\include{introduction}
+% \include{introduction}
 \include{chapter}
 \include{chapter2}
 % ...
@@ -170,5 +170,7 @@
 \bibliographystyle{amsplain}
 
 \bibliography{bibliography}
+
+\listoffigures
 
 \end{document}

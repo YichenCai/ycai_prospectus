@@ -398,7 +398,7 @@
  \def\coprojadviser#1{\gdef\@coprojadviser{#1}} \coprojadviser{*}
  \def\cocothadviser#1{\gdef\@cocothadviser{#1}} \cocothadviser{*}
  \def\cocoprojadviser#1{\gdef\@cocoprojadviser{#1}} \cocoprojadviser{*} 
- \def\doctype{\if \@projadviser *Dissertation \else Project \fi}
+ \def\doctype{\if \@projadviser *Prospectus \else Project \fi}
  \def\adviser{\if \@projadviser *\@thadviser \else \@projadviser\fi}
  \def\coadviser{\if \@coprojadviser *\@cothadviser\else \@coprojadviser\fi}
  \def\cocoadviser{\if \@cocoprojadviser *\@cocothadviser\else \@cocoprojadviser\fi}
