@@ -12,7 +12,7 @@
 
 \documentclass[chap,letterpaper]{thesis}
 %%%%%%%%
-\usepackage{epsfig, amssymb, amsmath, latexsym, graphicx, url, hyperref}
+\usepackage{epsfig, amssymb, amsmath, latexsym, graphicx, url}
 \usepackage{color}    %Latex picture produced by xfig uses color
 \usepackage{fancyhdr} %must be used with the chap option of the thesis class.
 %\usepackage[square, comma]{natbib}  %the sample bibliography doesn't work with this.
@@ -22,8 +22,12 @@
 %
 
 % yc added
-\renewcommand{\baselinestretch}{1.8}
+\usepackage[colorlinks,citecolor=blue,urlcolor=blue,bookmarks=false,hypertexnames=true]{hyperref} 
 \usepackage{lineno}
+\usepackage{natbib}
+\usepackage{siunitx}
+\renewcommand{\baselinestretch}{1.8}
+\setcitestyle{authoryear,open={},close={}}
 \linenumbers
 
 %%%%%%%% We determine text size and margin, not the style class file.
@@ -173,7 +177,8 @@
 
 %%%%%%%%%  BIBLIOGRAPHY %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\bibliographystyle{splncs}
-\bibliographystyle{amsplain}
+% \bibliographystyle{amsplain}
+\bibliographystyle{ametsoc2014}
 
 \bibliography{bibliography}
 

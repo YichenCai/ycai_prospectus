@@ -1,0 +1,8 @@
+CHAP1
+
+WHY STUDY LIGHTNING? 
+1. Global/National damage (fatality, injuries, monetary loss), link to floods.
+2. Growing trend of lightning risk in the bg of climate change, maybe some reference to India's report in past 2 yrs. Refer to papers about severe Tstorms/flooding under climate change.
+3. Application of Lightning obs data (e.g., storm intensity, flash flood prediction, climatology), as well as modeling based on correlations to mp/kinematics.
+4. Why focusing on the explicit physical process, not params based on correlation?
+5. Why focusing on charging, not discharge?
