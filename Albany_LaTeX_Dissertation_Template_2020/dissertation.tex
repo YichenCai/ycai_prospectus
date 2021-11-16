@@ -26,9 +26,14 @@
 \usepackage{lineno}
 \usepackage{natbib}
 \usepackage{siunitx}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{chngcntr}
+\counterwithout{figure}{chapter}
 \renewcommand{\baselinestretch}{1.8}
 \setcitestyle{authoryear,open={},close={}}
 \linenumbers
+\graphicspath{{./img/}}
 
 %%%%%%%% We determine text size and margin, not the style class file.
 \setlength{\textheight}{9.0in} %to leave 1in top and bot margin
@@ -179,9 +184,9 @@
 %\bibliographystyle{splncs}
 % \bibliographystyle{amsplain}
 \bibliographystyle{ametsoc2014}
-
 \bibliography{bibliography}
 
 \listoffigures
+\include{figures}
 
 \end{document}

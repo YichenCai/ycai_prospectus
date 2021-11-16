@@ -125,44 +125,44 @@
   \renewcommand\@chapapp{}
 \fi
 
-\def\specialhead#1{%   GENERAL HEADING WITHOUT A NUMBER (for abstract, etc.)
-     \ifx\phantomsection\undefined
-     \else
-        \clearpage\phantomsection
-     \fi
-     \addcontentsline{toc}{chapter}{#1}
-     \chapter*{\centering #1 \@mkboth{#1}{#1}}}
+% \def\specialhead#1{%   GENERAL HEADING WITHOUT A NUMBER (for abstract, etc.)
+%      \ifx\phantomsection\undefined
+%      \else
+%         \clearpage\phantomsection
+%      \fi
+%      \addcontentsline{toc}{chapter}{#1}
+%      \chapter*{\centering #1 \@mkboth{#1}{#1}}}
 
 
-\def\@chapter[#1]#2{\ifnum\c@firstchapter=0    % start of rpi added stuff
-                      \if@twoside\cleardoublepage\suppressfloats[t]\fi
-                      \pagenumbering{arabic} 
-                      \setcounter{firstchapter}{1}
-                    \fi
-                    \renewcommand{\thepage}{\arabic{page}}
-                    \thispagestyle{fancy}
-                    \pagestyle{fancy}
-                    \fancyhf{}
-                    \fancyfoot[C]{\thepage}
-                    \renewcommand{\headrulewidth}{0pt}
-                    \renewcommand{\footrulewidth}{0pt}
-                    \ifnum \c@secnumdepth >\m@ne
-                         \refstepcounter{chapter}%
-                         \typeout{\@chapapp\space\thechapter.}%
-                         \addcontentsline{toc}{chapter}%
-                                   {\protect\numberline{\thechapter.}#1}%
-                    \else
-                      \addcontentsline{toc}{chapter}{#1}%
-                    \fi
-                    \chaptermark{#1}% 
-%                    \addtocontents{lof}{\protect\addvspace{10\p@}}%
-%                    \addtocontents{lot}{\protect\addvspace{10\p@}}%
-                    \if@twocolumn
-                      \@topnewpage[\@makechapterhead{#2}]%
-                    \else
-                      \@makechapterhead{#2}%
-                      \@afterheading
-                    \fi}
+% \def\@chapter[#1]#2{\ifnum\c@firstchapter=0    % start of rpi added stuff
+%                       \if@twoside\cleardoublepage\suppressfloats[t]\fi
+%                       \pagenumbering{arabic} 
+%                       \setcounter{firstchapter}{1}
+%                     \fi
+%                     \renewcommand{\thepage}{\arabic{page}}
+%                     \thispagestyle{fancy}
+%                     \pagestyle{fancy}
+%                     \fancyhf{}
+%                     \fancyfoot[C]{\thepage}
+%                     \renewcommand{\headrulewidth}{0pt}
+%                     \renewcommand{\footrulewidth}{0pt}
+%                     \ifnum \c@secnumdepth >\m@ne
+%                          \refstepcounter{chapter}%
+%                          \typeout{\@chapapp\space\thechapter.}%
+%                          \addcontentsline{toc}{chapter}%
+%                                   {\protect\numberline{\thechapter.}#1}%
+%                     \else
+%                       \addcontentsline{toc}{chapter}{#1}%
+%                     \fi
+%                     \chaptermark{#1}% 
+% %                    \addtocontents{lof}{\protect\addvspace{10\p@}}%
+% %                    \addtocontents{lot}{\protect\addvspace{10\p@}}%
+%                     \if@twocolumn
+%                       \@topnewpage[\@makechapterhead{#2}]%
+%                     \else
+%                       \@makechapterhead{#2}%
+%                       \@afterheading
+%                     \fi}
 \def\@makechapterhead#1{%
   \vspace*{0\p@}%
   {\parindent \z@ \raggedright \centering \normalfont \chaptersize
@@ -230,10 +230,10 @@
 \renewcommand\dblfloatpagefraction{.8}
 
 \long\def\@makecaption#1#2{%
-  \vskip\abovecaptionskip
-  \sbox\@tempboxa{\bfseries#1:~~#2}%   Make caption bold
+%   \vskip\abovecaptionskip
+  \sbox\@tempboxa{#1:~~#2}%   Make caption bold
   \ifdim \wd\@tempboxa >\hsize
-   {\bfseries #1:~~#2}\par%            Make caption bold
+  {#1:~~#2}\par%            Make caption bold
   \else
     \global \@minipagefalse
     \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
@@ -534,7 +534,7 @@
      \end{singlespace}
      \newpage
      \pagestyle{plain}      %pages beyond title should be numbered
-     \pagenumbering{roman}  %note: this resets page numbering
+    %  \pagenumbering{roman}  %note: this resets page numbering
      \setcounter{page}{2}   %next page is page 2
 }
  
