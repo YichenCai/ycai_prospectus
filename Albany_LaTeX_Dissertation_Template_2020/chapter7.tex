@@ -6,21 +6,24 @@
  
 \chapter{Discussion}
 \resetfootnote %this command starts footnote numbering with 1 again.
+\label{chap:discus}
+The above preliminary analysis provides an introduction to the complexities of the  electrification scheme itself and its dependencies on the microphysical parameterizations. A number of research questions and limitations emerge from what has been presented thus far. These limitations are either resolvable in future work or intrinsic to the research question itself. These limitations will be summarized next.
+%---------------------------------------------------------------------------------------%
+\section{Graupel-hail option in M2M}
+The binary choice of either graupel or hail is physically imperfect, although the boundary of the two can be blurry, a separation as parameterized in N2M is more realistic. Furthermore, it is concerning that graupel itself fails to generate any lightning in M2M, given the reality that most thunderstorms are more prevalent with graupel than they are with hail. A more realistic representation of graupel itself, if not considering hail, should be developed for proper simulation of electrification. While development of a new graupel scheme for M2M is outside the scope of this work, the effect of graupel will be analyzed in more detail using the AHM: A new riming scheme has been parameterized for the AHM by \cite{jensen2015modeling}. This scheme will be implemented into this research's version of the AHM with electrification, and will serve as a major improvement to the M2M parameterization.
+[
+
+]
 
 %---------------------------------------------------------------------------------------%
-\section{Overview}
+\section{Efficiency parameters of particle interaction}
+Currently in M2M, the collection of snow and ice by graupel is absent. Arguably, M2M assumed all collisions between graupel and ice or snow result in rebound, which is unrealistic. The ice-ice collection efficiency of 0.1 is only used for snow-ice interactions. However, during implementation of N2M charging scheme into M2M, a maximum collision efficiency of graupel and ice is included for collisional charging. This implies that a portion of cloud ice collides into graupel without rebound. The impact of this inconsistency is unknown and requires further investigation. Further, more realistic collection efficiencies depending on temperature and particle size are expected to improve simulation results.
 %---------------------------------------------------------------------------------------%
+\section{Lightning simulation validation}
+As mentioned in \ref{sec:electrification}, there is difference in the physical definition of lightning discharge (and flashes) between models and observations. It is still feasible to validate simulated location and intensity evolution of storm, but the exact amount of lightning is challenging to validate. Some grouping algorithms that create flash data (e.g., NA-LMA, GOES-GLM, TRMM-LIS) will be considered when available. In order to compensate the challenge inflicted by using lightning data, a more thorough microphysical analysis will be facilitated through polarimetric NEXRAD signatures, which not only include shape information that can be compared directly to the AHM, but Level III data provide a proxy of hydrometeor classification, which could elucidate hydrometeor interactions, as compared to simulations. With this capability, while some lightning observations may fail to validate modeled lightning signatures, comparisons among microphysical signatures may yet shed light on the physical processes involved in the production of simulated lightning.
 
-Here is a file for your chapters.  Copy this file for each chapter 
-and change the titles.  Don't forget to add include statemets to 
-dissertation.tex.  
-You can use sections (as above).  
-You can add glossary terms like \gls{eregex} and acronyms like \glsname{SRE}.
-You can use footnotes.\footnote{Here is a footnote.}
-Don't forget to cite books~\cite{Sipser} and papers~\cite{CarleNarendran}.
+\section{Case selection}
+The current case selected is also challenging to represent in general, as discussed in \ref{sec:case_ovv}. Given this, this work proposes to use the diagram presented in \ref{fig:data_timeline} to identify cases where an abundance of suitable observations are available. Another solution for case selection is through literature review for storm(s) heavily simulated and analyzed by previous studies, which very likely comes with field campaign observation data with less traditional but extremely useful quantities (e.g., electric field, charge density). Potential possibilities include 1) A small multicell storm complex observed on 28–29 June 2004 during the Thunderstorm Electrification and Lightning Exper- iment (TELEX) (\cite{macgorman2008telex}), which has been simulated by (\cite{mansell2010simulated} and \cite{mansell2013aerosol}) in an 3-D idealized model; 2) a severe continental squall line on 15 April 2012, simulated by \cite{fierro2013implementation} in WRF-ELEC. 
 
-%---------------------------------------------------------------------------------------%
-\section{Model Setup}
-%---------------------------------------------------------------------------------------%
-
-Here is the content for section two.
+\section{Questions remain from electrification and microphysics analysis}
+During the analysis of the case selected, it remains unclear as to why certain hydrometeors (e.g., rain, snow) exhibit their vertical charge distribution in such disparity from N2M to M2M. Other questions from the electrification analysis include the larger charge/charging rate in the coarser resolution run (4km inner domain) compared to the more resolved run (1km) using N2M. Though it is apparently a result of microphysical mass transfer processes, further investigation of the explicit processes involved needs to be conducted through thorough analysis of microphysical process rates. A decomposition of charging rates by interacting hydrometeor type (SI,GI,GS) will be conducted and serve as an explanation for certain charge structures. For a comprehensive and integrated understanding of the storm electrification, it is also useful to study the role of such differences using a vertical distribution to many questions raised from the discharge results. For example, the N2M scheme resulted in a  larger amount of lightning, whereas M2M resulted in an overall more horizontally spread-out structure of lightning breakdown. These analyses requires a deeper understanding into the discharge scheme implemented and the communication of the scheme with other modules of the model, e.g., microphysics and dynamics. The code for related processes will be revisited for more organized interpretation, with a focus on the variables used to feed the discharge scheme. As mentioned in the microphysics analysis (\ref{sec:micro_anal}), it is unknown as to why N2M 1km produced about 3-4 times as much of ice, both in terms of number and mass, as that from all other simulations. Further investigation into the ice process rates is required. Within M2M, there is also much more to discover and understand in terms of the processes involving graupel, especially at lower levels, that might serve to explain the larger amount of graupel shown in \ref{fig:hdmt_z1d} (e) when using M2M-graupel. Mean particle size will be studied to further compare and understand the behaviors of graupel and hail in M2M.

@@ -534,8 +534,8 @@
      \end{singlespace}
      \newpage
      \pagestyle{plain}      %pages beyond title should be numbered
-    %  \pagenumbering{roman}  %note: this resets page numbering
-     \setcounter{page}{2}   %next page is page 2
+     \pagenumbering{arabic}  %note: this resets page numbering
+    %  \setcounter{page}{2}   %next page is page 2
 }
  
  \def\abstitlepage{%

@@ -4,30 +4,190 @@
 %                                                                 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
  
-\chapter*{Model Representation / Methodology}
+\chapter{Model Representation / Methodology}
+\label{chap:models}
 \resetfootnote %this command starts footnote numbering with 1 again.
+A background on electrification and ice microphysics has been established, with a clear indication that the way in which ice particles are represented in numerical models could influence the prediction of lightning. Investigations of lightning using the Weather Research and Forecasting (WRF) model are facilitated by a modification to the framework to include computation of electrification, namely, WRF-ELEC (\href{https://sourceforge.net/projects/wrfelec/}{package} credits to Dr. Mansell, National Severe Storms Laboratory (NSSL)). In addition to the WRF-ELEC package, major amendments were incorporated in to the microphysical parameterization. Note that in this package, the simulated interaction between microphysics and charging is one-directional. That is, the computation of electrification is based on and fed by information of hydrometeors in the microphysics module; but results of electrification variables (e.g., particle charge, electric field, electric potential, lightning discharge) do not affect microphysical processes. 
+
+Thus far, the WRF-ELEC package is only available in the National Severe Storm Laboratory Two-Moment (N2M) microphysics model (Mansell et al. 2010). More detailed microphysical models have since been developed, particularly for ice particle growth and subsequent collection (e.g., AHM). Given the sensitivity of electrification on ice hydrometeor interactions, an investigation into this sensitivity as a function of microphysical parameterization is warranted. And so, the purpose of this work is to implement the WRF-ELEC package into additional WRF microphysical modules to enable this analysis.
 
 %---------------------------------------------------------------------------------------%
 \section{N2M Model}
+
 %---------------------------------------------------------------------------------------%
-
-Here is a file for your chapters.  Copy this file for each chapter 
-and change the titles.  Don't forget to add include statemets to 
-dissertation.tex.  
-You can use sections (as above).  
-You can add glossary terms like \gls{eregex} and acronyms like \glsname{SRE}.
-You can use footnotes.\footnote{Here is a footnote.}
-Don't forget to cite books~\cite{Sipser} and papers~\cite{CarleNarendran}.
-
 \subsection{Microphysics}
-\subsection{Charging scheme}
+N2M is a fully two-moment bulk microphysics parameterization scheme, which predicts mass/number mixing ratio of cloud droplets, raindrops, ice crystals (columnar only), snow (including large ice crystals and aggregates), graupel and hail. Hydrometeors are assumed to have their size distributed in form of the gamma function, as stated in \cite{mansell2010simulated}: 
+\begin{equation}
+    N(v) = 
+    A\frac{v^{\nu}}{\bar{v}^{\nu+1}}
+    exp \left(
+    -B{( \frac{v}{\bar{v}} )}^\mu
+    \right)
+    \label{eq:gamma_dis}
+\end{equation}
+where $N$ is number concentration of the species, $v$ is particle volume, $\nu,\mu$ are shape parameters specific to the particle category, and $A,B$ are functions of $\nu,\mu$ and their gamma function (see \cite{mansell2010simulated}). 
+In the version available in this study, density of snow, graupel, and hail are prognostic and subject to change in total particle volume and the melting process: e.g., the density of graupel varies from 300 to 900 kg/m$^3$. The terminal fall velocity of graupel $V_g(D)$ is calculated based on diameter following \cite{schoenberg1994double}:
+\begin{equation}
+    V_g(D) = 
+    (\frac{\rho_0}{\rho_{air}})^{1/2} a_g D^{b_g}
+    \label{eq:graupel_fall}
+\end{equation}
+where $a_g$ and $b_g$ are fall speed parameters:
+\begin{equation}
+    a_g = \left(
+    \frac{4\rho_g g} {3C_D\rho_{air}}
+    \right)^{1/2}
+    , b_g=\frac{1}{2}
+\end{equation}
+and $\rho_0,\rho_{air}$ are reference air density and actual air density, $D$ is graupel diameter. This calculation of fall speed is not capped with a maximal threshold, and has been found through initial sensitivity tests to reach values up to 78 m/s, which is not quite realistic. 
 
+\subsection{Charging scheme}
+\label{sec:n2m_charge}
+The parameterization of electrification in WRF-ELEC is composed of charging and discharging components. The charging scheme in the N2M microphysics module prognostically calculates the change in charge density carried by all species of hydrometeors as well as ions (units of $Coulomb/kg$). These hydrometeor charge densities (HCDs) can evolve through the growth of the hydrometeors, as well as through hydrometeor interactions (e.g., collisions). These HCDs are then fed to and renewed by the discharge scheme outside the microphysics module, inside which the HCDs are used to compute electric field and electric potential, which are then used to parameterize lightning breakdown processes. Like other scalar variables, the HCDs are advected within the dynamic framework. Overall, the rate of change of the charge carried by a specific species is calculated by integrating the charge conservation equation (\cite{mansell2005charge}, equation 2), which considers
+% \begin{equation}
+%     \frac{\partial Q_n}{\partial t} = 
+%     -\bm{\nabla}\cdot(\bm{V}Q_n)
+%     +\bm{\nabla}\cdot(K_h\bm{\nabla} Q_n)
+%     +\frac{\partial V_{T,n}Q_n}{\partial z}
+%     +S_n
+% \end{equation}
+ horizontal advection, turbulent mixing, sedimentation, and the sources and sinks of the charge density associated with the microphysics that consists of two basic processes of charge transfer: Collisional charge separation and mass transfer among species. The collisional charging, which is the ultimate production term of total charge, is further contributed by noninductive charging and (optionally) inductive charging. \ref{table:n2m_charge_type} lists the larger and smaller particles involved in different types of collisional charging considered. Currently, N2M takes into account the collision-rebound among ice, snow, graupel, and hail for noninductive charging, while only collision of frozen hydrometeors with droplets are considered for inductive charging. As addressed in \cite{mansell2005charge}, this is due to the higher collide-rebound probability between ice particles that is more likely to lead to noninductive charge separation, while the ice itself is not conductive enough to produce significant inductive charging.  To appropriately parameterize the hydrometeor charging and define the necessary coefficients, the N2M relies on results from laboratory experiments: ``TAK" scheme based on \cite{takahashi1978riming}; Gardiner/ Ziegler (``GZ") scheme adapted from \cite{ziegler1991model} and is based on \cite{gardiner1985measurements}; ``S91" scheme from \cite{saunders1991effect}; and two parameterizations using critical rime accretion rate ($RAR_{crit}$): (1) Riming Rate ``RR" scheme based on \cite{brooks1997effect} and modified by \cite{saunders1998laboratory}, and (2) ``SP98" from \cite{saunders1998laboratory}. Detailed description and comparison of these schemes are discussed in \cite{mansell2005charge}. Overall, the impact of these charging scheme, while resulting in slight modifications to charge magnitude and lightning production, the spatial distribution of charge layers (i.e., charge structure) can vary drastically. The inductive charging among ice categories is considered ineffective, due to the low conductivity of pure ice and insufficient contact time for significant charge transfer (\cite{latham1962electrical}). Thus, only droplets rebounding with snow, graupel, and hail are considered for inductive charging, and only when the ice particles are in dry growth mode (no/little liquid on particle surface). In this study, the default ``RR" noninductive scheme and inductive charging method illustrated in \cite{ziegler1991model} are used, details of which will be described in \ref{sec:morr_charge}.
 %---------------------------------------------------------------------------------------%
 \section{M2M model }
-%---------------------------------------------------------------------------------------%
+``Electrifying" the Morrison Two-moment (M2M, \cite{morrison2009impact}) microphysics serves as an intermediate step for eventually implementing the N2M charging scheme into the AHM, given that the AHM is similar to M2M, yet more complicated: the AHM development follow that of M2M, with major modifications to the ice deposition/sublimation processes. With this, comparisons between M2M and AHM enables a more controlled analysis of the impact of ice crystal habit on cloud electrification. Meanwhile, comparisons between M2M and N2M, as will be discussed in \ref{chap:results}, pioneers a path for analyzing intricate interrelationships between microphysics and electrification, which facilitates future investigation of AHM electrification.
+%--------------------------------------------------------------------------------------%
+\subsection{Microphysics}
+The M2M is based on \cite{morrison2005new} with addition of graupel category in addition to cloud droplets, rain, cloud ice, and snow. Implemented in WRF, M2M predicts mass mixing ratio $q$ and number concentration $N$ of the five categories hydrometeors mentioned. Highlights of M2M includes physics-based parameterization of droplet activation and ice nucleation (\cite{morrison2005new}). The general kinetic equation for scalar variables $q,N$ (here represented as $A$) are in the form of 
+\begin{equation}
+    \frac{\partial A}{\partial t} = 
+    -\bm{\nabla}\cdot(\bm{V}A)
+    +\bm{\nabla}\cdot(K_h\bm{\nabla} A)
+    +\frac{\partial V_{T,n}A}{\partial z}
+    +S_{n,A}
+\end{equation}
+The first 3 terms on the RHS address spatial derivatives (horizontal advection, turbulent mixing and sedimentation). $K_h$ is the sub-grid eddy mixing coefficient for heat, $V_{T,n}$ is the terminal fall speed for species $n$, and $z$ is height. $S_{n,A}$ defines the sources and sinks due to microphysics processes, which includes initial production (activation/nucleation), condensation/evaporation, autoconversion, collection, melting/freezing and (ice) multiplication for mass mixing ratio, and an extra term of self-collection for number concentration. The size distribution of hydrometeors also follows a gamma function, but using different shape parameters from N2M:
+\begin{equation}
+    N(D) = 
+    N_0 D^{\mu}
+    exp(-\lambda D)
+\end{equation}
+The shape factors $N_0$ and $\lambda$ are adjusted for every predicted total number concentration using parameters from mass-diameter ($D$) relationship specific to each hydrometeor. While hail is not among the five hydrometeors, an option exists in M2M to adjust graupel coefficients to replace graupel with hail. Index $\mu$ is set to zero for cloud ice, rain, snow, and graupel, leading to a inverse-exponential function (Marshall–Palmer distributions). The integrated number concentration of these species:
+\begin{equation}
+    N = N_0 \lambda^{-1}
+    \label{eq:MP_distr}
+\end{equation}
+And the mean diameter:
+\begin{equation}
+    \bar{D} = 
+    \frac{\int_0^{\infty} D N(D) dD} {\int_0^{\infty} N(D) dD}
+    = \lambda^{-1}
+\end{equation}
+For cloud droplets, $\mu$ is derived from observation study in \cite{martin1994measurement} as a function of number concentration. M2M adopts a constant bulk density (see \ref{table:m2m_param}) for all hydrometeors. The terminal fall speed of all species $x$ are in the  form similar to \ref{eq:graupel_fall}
+\begin{equation}
+    V_x(D) = 
+    \gamma^{\alpha}
+    a_x D^{b_x}
+    \label{eq:fallspeed_morr}
+\end{equation}
+where the density scaler $\gamma=\frac{\rho_{air,850mb}}{\rho_{air}}$  uses 850mb as the reference level; $\alpha$ is the index for the scaler. Values of parameters $a,b$ are listed in \ref{table:m2m_param}. Given the inverse-exponential size distribution of ice, snow and graupel, the mass-weighted mean fall speed is calculated:
+\begin{equation}
+    \overline{V_{x,m}} = 
+    \frac{\int_0^{\infty} V_D m_D N_D dD} {\int_0^{\infty} m_D N_D dD}
+    \label{eq:mass_wt_fall}
+\end{equation}
+Combining \ref{eq:fallspeed_morr} and \ref{eq:MP_distr}, \ref{eq:mass_wt_fall} can be written:
+\begin{equation}
+    \overline{V_{x,m}} = 
+    \frac{\gamma a_x \Gamma(b_x+4)} {\lambda_x^{b_x} \Gamma(4)}
+    \label{eq:integrated_mean_fall}
+\end{equation}
+These fall speeds are constrained with an upper bound:
+\begin{equation}
+    V_{max} = 
+    f_m \gamma ^{\alpha}
+\end{equation}
+where $f_m$ is the maximum fall speed at reference level. Values for $f_m, \alpha$ are specific to hydrometeor types and are summarized in (\ref{table:m2m_param}).
+Currently M2M does not have an explicit hail category. However, an option is available to treat graupel as hail (based on \cite{matson1980direct}) in terms of density and fall speed parameterization, albeit no difference was made to the microphysical processes involved. This switch, as discussed in \ref{chap:results}, can largely influence charging and lightning production.
+% \begin{equation}
+%     V (D) = 
+%     \frac{\rho_{sea-level}}{\rho}
+%     aD^b
+% \end{equation}
+\subsection{Charging scheme}
+\label{sec:morr_charge}
+A large component of this work is developing a compatible electrification scheme for M2M following the scheme in N2M. Hence, any deviation in charge production is a result of microphysics representation. As is done in N2M, collisional charging and charge transferred with mass mentioned in \ref{sec:n2m_charge} are included in the same fashion in M2M. Since M2M does not include graupel and hail simultaneously, there are only three types of collisional charging mechanisms in M2M (\ref{table:m2m_charge_type}). The total charging rate due to collision-rebound between species $x$ and $y$, $C_{xy}$"is the all-size integration of the product of collision-rebound rate and charge produced per event:
+\begin{equation}
+    \frac{\partial C_{xy}}{\partial t} = 
+    \int_{0}^{\infty} \int_{0}^{\infty}
+    \frac{\pi}{4} 
+    % \varepsilon_{colli}(1-\varepsilon_{stk})
+    (EP)
+    \mid V_x-V_y \mid
+    (D_x+D_y)^2 
+    N_x(D_x) N_b(D_y)
+    \delta q'_{xy}
+    dD_x dD_y
+    \label{eq:general_charge_int}
+\end{equation}
+where the ``event probability" $EP=\varepsilon_{colli}(1-\varepsilon_{stk})$ is the product of collision efficiency $\varepsilon_{colli}$ and rebound probability ($1-\varepsilon_{stk}$) given a collision. $D$ is particle diameter, $N$ is number concentration. $\delta q'_{ab}$ is charge per collision. Since \ref{eq:general_charge_int} is not practical to apply directly in a bulk model, assumptions are made to simplify the integration. $\delta q'_{ab}$ and $V$ are treated as mass-weighted averages and pulled out of the integration:
+\begin{equation}
+    \frac{\partial C_{xy}}{\partial t} = 
+    \beta
+    \delta q_{xy}
+    % \mid \bar{V_a}-\bar{V_b} \mid
+    (1-\varepsilon_{stk})
+    n_{xy}
+    \label{eq:3.14}
+\end{equation}
+where $\beta$ is a temperature factor that diminishes quadratically from 1 to 0 as temperature decreases from -30$^\circ$C to -43$^\circ$C, due to the uncertainty of charge sign at temperature lower than -43$^\circ$C. $n_{xy}$ is the collision rate between $x,y$ species:
+\begin{equation}
+    n_{xy} = 
+    \varepsilon_{colli}
+    \mid \bar{V_x}-\bar{V_y} \mid
+    \int_0^{\infty} \int_0^{\infty}
+    \frac{\pi}{4}
+    (D_x+D_y)^2
+    N_x(D_x) N_y(D_y)
+    dD_x dD_y
+    \label{eq:3.15}
+\end{equation}
+In this study, mass-weighted mean fall speed (\ref{eq:integrated_mean_fall}) is used for collisional charging. Assuming the smaller colliding particle has negligible diameter and fall speed compared to the larger collider, a simplified equation of collision rate for snow-ice (SI), graupel-ice (GI), and graupel-snow (GS) charging follow the form of (assuming $x$ is smaller and $y$ larger)
+\begin{equation}
+    n_{xy} = 
+    \frac{\pi}{4}
+    \gamma a_y 
+    \varepsilon_{colli}
+    N_x N_y 
+    \lambda_y^{-(b_y+2)}
+    \Gamma(b_y+3)
+    \label{eq:3.16}
+\end{equation}
+Currently in M2M, collision efficiencies are assume to be unity for all collection processes, which does not hold true especially for small crystal sizes, as shown in lab results from \cite{keith1989collection}. A possible solution is to adapt explicit calculation of collision rates in N2M based on particle size, which will be considered for future work.
 
-Here is the content for section two.
-
+The bulk charge per event $\delta q_{xy}$ is parameterized using one of the five schemes mentioned in \ref{sec:n2m_charge}. Same as in N2M, the Rime Accretion Rate (RAR)-based ``RR" scheme is selected for M2M. This scheme adapts charging equations from \cite{brooks1997effect}:
+\begin{equation}
+    \delta q_{xy} = 
+    B D_x^a 
+    {\mid V_y - V_x \mid}^b
+    q_{\pm}(RAR)
+    \label{eq:3.17}
+\end{equation}
+where $B,a,b$ are crystal size-based parameters listed in \cite{mansell2005charge} Table 1. $q_{\pm}(RAR)$ is a function of relative magnitude of predicted and critical RARs. For a greater predicted RAR, species $y$ (collector) is charged positively, and vice versa:
+\begin{equation}
+    \begin{cases}
+        q_+(RAR) = 6.74(RAR-RAR_{crit}) \\
+        q_-(RAR) = 3.9(RAR_{crit}-0.1)
+        \left[
+        4(\frac{RAR-(RAR_{crit}+0.1)/2}{RAR_{crit}-0.1})^2 -1
+        \right]
+    \end{cases}
+\end{equation}
+where RAR is the effective water content multiplied by graupel average relative fall speed, and the critical RAR, $RAR_{crit}$, is a function of temperature as depicted in \ref{fig:RAR}.
 %---------------------------------------------------------------------------------------%
 \section{AHM}
+The Adaptive Habit Model was first developed as Lagrangian parcel model with 200 bins in \cite{sulia2011ice}. After conversion to a bulk model by \cite{harrington2013methoda} and kinemetic analysis by \cite{sulia2013method}, the AHM has been implemented into WRF (\cite{harrington2013methoda}, \cite{sulia2014dynamical}), after which a number of sensitivity tests and modeling analyses have been performed. \cite{gaudet2019sensitivity} investigated the impact of crystal habit representation and ice nucleation on simulation of a winter lake effect storm using AHM. \cite{gaudet2021assessment} later expanded this investigation into an ensemble framework for further examination of many aspects of microphysics (e.g., particle fall speed, number of moments, shape parameters of hydrometeors) and their roles in lake-effect simulations using AHM, National Taiwan University microphysics model and other publicly available microphysics schemes. \cite{sulia2021new} implemented shape-aware ice-ice aggregation scheme into AHM and analyzed its impacts to related microphysics processes in an idealized squall line. 
+
+ In addition to the mass mixing ratio and number concentration predicted by traditional two-moment microphysics models, AHM extends most assumptions of spheres or diagnostic mass-dimensional relationships by enabling prediction of two primary axis lengths $a,c$ of assumed spheroidal ice crystals, where the bulk number concentration of ice crystal is a modified gamma distribution ($\Gamma(\nu)$ with shape $\nu$) of $a$ axis. The ice crystal aspect ratio $\phi$ is defined as the ratio of axis lengths ($c/a$). A $\phi$ value larger than 1 indicates an ice crystal of columnar shape (prolate, $a<c$), while $\phi<1$ corresponds to a plate-like crystal (oblate, $a>c$). The prediction of an extra axis length is achieved by employing the temperature-dependent inherent growth ratios (IGRs) from \cite{chen1994theoretical} and \cite{hashino2008spectral}, which accounts for the preference of vapor deposition onto the basal faces or prism faces, and thus the growth rate ratio of the $c$ and $a$ axes. This method (detailed derivation can be found in \cite{chen1994theoretical}) addresses the crux of resolving the major limitation of traditional capacitance model where a the aspect ratio of the particle is assumed constant, leading to underestimation of crystal growth rate. In AHM, $\phi$ is predicted by a tracking parameter that contains information on the temporal evolution of IGRs (i.e., temperature). This tracking technique allows for smoother and more realistic prediction of ice crystal size and shape, as validated in \cite{harrington2013methodb} against wind-tunnel grown particles (\cite{fukuta1999growth}). The change in crystal mass is predicted following the capacitance model (\cite{pruppacher2012microphysics}). Change in the spheroidal volume is then computed using the ice depositional density, which is a function of temperature and excess vapor content. Eventually, $a$ is derived using its relationship with the equivalent volume spherical radius and the IGR at the time.
+ 
+ The AHM will be equipped with the N2M charging scheme in the same way as M2M. The majority of the work is to couple the charge variables to the existing hydrometeors variables, using the hydrometeor mass transfer rates to calculate the charge transferred alongside the mass, and using hydrometeor mass, number, and fall speed to calculate noninductive and inductive charging rates. The parameterization of density and fall speed of graupel in the original AHM (added ice habit only) is currently identical to that in M2M. 
 %---------------------------------------------------------------------------------------%

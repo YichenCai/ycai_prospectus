@@ -29,7 +29,16 @@
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{chngcntr}
+\usepackage[table,xcdraw]{xcolor}
+\usepackage{caption}
+\usepackage{diagbox}
+\usepackage{bm}
+\usepackage{enumitem}
+% \usepackage[justification=centering]{caption}
+% \usepackage{caption,kantlipsum,setspace}
+% \captionsetup[figure]{font={stretch=1.2}}
 \counterwithout{figure}{chapter}
+\counterwithout{table}{chapter}
 \renewcommand{\baselinestretch}{1.8}
 \setcitestyle{authoryear,open={},close={}}
 \linenumbers
@@ -113,7 +122,7 @@
 % the following section with your own information.
 
 \thesistitle{\bf Research Prospectus}
-\thesissubtitle{\bf The importance of ice microphysics on storm electrification}        
+\thesissubtitle{\bf The importance of ice microphysics in storm electrification}        
 \author{Yichen Cai}        
 \degree{Doctor of Philosophy}        
 \college{College of Arts and Sciences}
@@ -143,16 +152,18 @@
 %\includeonly{chapter1}  % When computers were slower, we used \includeonly to process only
                          % the file(s) listed inside the braces                       
 \begin{document}
- 
+\let\ref\autoref
 \titlepage     
 % \dedication   %optional
 
 % \include{abstract}  %The heading for abstract, acknowledgment, introduction, chapter, etc.
 % \include{ack}
 %is put in the included file, followed by the content.
-
 \tableofcontents
-
+\addtocontents{toc}{\protect\thispagestyle{empty}} % remove 1st toc pagenumber
+\thispagestyle{empty} % remove last toc pagenumber
+\clearpage % start page number from next page
+\pagenumbering{arabic} % reset page number to start from 1
 % \include{introduction}
 \include{chapter1}
 \include{chapter2}
@@ -168,16 +179,16 @@
 
 
 %%%%%  APPENDICES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\appendix    % This command is used only once!
+% \appendix    % This command is used only once!
 %\addcontentsline{toc}{chapter}{APPENDICES}             %toc entry  or:
 \addtocontents{toc}{\parindent0pt\vskip12pt APPENDICES} %toc entry, no page #
 
-\include{appendix}
+% \include{appendix}
 %\include{appendix2}
 
 
 %%Glossaries will appear as appendices.
-\printglossaries
+% \printglossaries
 
 
 %%%%%%%%%  BIBLIOGRAPHY %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -185,6 +196,9 @@
 % \bibliographystyle{amsplain}
 \bibliographystyle{ametsoc2014}
 \bibliography{bibliography}
+
+\listoftables
+\include{tables}
 
 \listoffigures
 \include{figures}

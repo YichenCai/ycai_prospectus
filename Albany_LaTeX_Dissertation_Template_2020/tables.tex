@@ -1,0 +1,138 @@
+
+
+% Please add the following required packages to your document preamble:
+% \usepackage[table,xcdraw]{xcolor}
+% If you use beamer only pass "xcolor=table" option, i.e. \documentclass[xcolor=table]{beamer}
+\begin{table}[H]
+\centering
+% \captionsetup{justification=centering}
+\caption{Abbreviations and types of charging in N2M}
+\begin{tabular}{|l|c|c|c|}
+\hline
+ \backslashbox{Larger}{Smaller}       & ice (column)                                                                & snow                                                                        & cloud droplet                                                               \\ \hline
+snow    & { \begin{tabular}[c]{@{}c@{}}SI\\ noninduc.\end{tabular}} & {/}                                                     & { \begin{tabular}[c]{@{}c@{}}SC\\ induc.\end{tabular}} \\ \hline
+graupel & { \begin{tabular}[c]{@{}c@{}}GI\\ noninduc.\end{tabular}} & { \begin{tabular}[c]{@{}c@{}}GS\\ noninduc.\end{tabular}} & { \begin{tabular}[c]{@{}c@{}}GC\\ induc.\end{tabular}} \\ \hline
+hail    & { \begin{tabular}[c]{@{}c@{}}HI\\ noninduc.\end{tabular}}     & { \begin{tabular}[c]{@{}c@{}}HS\\ noninduc.\end{tabular}}     & { \begin{tabular}[c]{@{}c@{}}HC\\ induc.\end{tabular}} \\ \hline
+\end{tabular}
+\label{table:n2m_charge_type}
+\end{table}
+
+
+
+% Please add the following required packages to your document preamble:
+% \usepackage[table,xcdraw]{xcolor}
+% If you use beamer only pass "xcolor=table" option, i.e. \documentclass[xcolor=table]{beamer}
+\begin{table}[H]
+\centering
+% \captionsetup{justification=centering}
+\caption{Abbreviations and types of charging in M2M}
+\begin{tabular}{|l|c|c|c|}
+\hline
+ \backslashbox{Larger}{Smaller}       & ice                                                                & snow                                                                        & cloud droplet                                                               \\ \hline
+snow    & { \begin{tabular}[c]{@{}c@{}}SI\\ noninduc.\end{tabular}} & {\backslashbox{}{.}}                                                     & { \begin{tabular}[c]{@{}c@{}}SC\\ induc.\end{tabular}} \\ \hline
+graupel/hail & { \begin{tabular}[c]{@{}c@{}}GI\\ noninduc.\end{tabular}} & { \begin{tabular}[c]{@{}c@{}}GS\\ noninduc.\end{tabular}} & { \begin{tabular}[c]{@{}c@{}}GC\\ induc.\end{tabular}} \\ \hline
+% hail    & { \begin{tabular}[c]{@{}c@{}}HI\\ N2M\end{tabular}}     & { \begin{tabular}[c]{@{}c@{}}HS\\ N2M\end{tabular}}     & { \begin{tabular}[c]{@{}c@{}}HC\\ N2M\end{tabular}} \\ \hline
+\end{tabular}
+\label{table:m2m_charge_type}
+\end{table}
+
+
+
+
+% Please add the following required packages to your document preamble:
+% \usepackage[table,xcdraw]{xcolor}
+% If you use beamer only pass "xcolor=table" option, i.e. \documentclass[xcolor=table]{beamer}
+\begin{table}[H]
+\centering
+\caption{Hydrometeor-specific parameters in M2M}
+\begin{tabular}{|l|c|c|c|c|c|}
+\hline
+{\color[HTML]{333333} }               & {\color[HTML]{333333} a ($m^{1-b}$)} & {\color[HTML]{333333} b}          & {\color[HTML]{333333} density ($kg/m^3$)} & $f_m$ ($m/s$) & $\alpha$ \\ \hline
+{\color[HTML]{333333} droplet}        & {\color[HTML]{333333} 3e7}                          & {\color[HTML]{333333} 2}          & {\color[HTML]{333333} 997}             & 9.1        & 0.54  \\ \hline
+{\color[HTML]{333333} rain}           & {\color[HTML]{333333} 841.99667}                    & {\color[HTML]{333333} 0.8}        & {\color[HTML]{333333} 997}             & 9.1        & 0.54  \\ \hline
+{\color[HTML]{333333} ice}            & {\color[HTML]{333333} 700}                          & {\color[HTML]{333333} 1}          & {\color[HTML]{333333} 500}             & 1.2        & 0.35  \\ \hline
+{\color[HTML]{333333} snow}           & {\color[HTML]{333333} 11.72}                        & {\color[HTML]{333333} 0.41}       & {\color[HTML]{333333} 100}             & 1.2        & 0.54  \\ \hline
+{\color[HTML]{333333} graupel / hail} & {\color[HTML]{333333} 19.37 / 114.5}                & {\color[HTML]{333333} 0.37 / 0.5} & {\color[HTML]{333333} 400 / 900}       & 20         & 0.54  \\ \hline
+\end{tabular}
+\label{table:m2m_param}
+\end{table}
+
+
+
+
+
+% Please add the following required packages to your document preamble:
+% \usepackage[table,xcdraw]{xcolor}
+% If you use beamer only pass "xcolor=table" option, i.e. \documentclass[xcolor=table]{beamer}
+\begin{table}[H]
+\caption{Inner domain configuration for 1km and 4km groups}
+\begin{tabular}{
+>{\columncolor[HTML]{D4D4D4}}l llllll}
+\cellcolor[HTML]{B0B3B2} & \cellcolor[HTML]{B0B3B2}resolution\_xy & \cellcolor[HTML]{B0B3B2}timestep & \cellcolor[HTML]{B0B3B2}IC/BC & \cellcolor[HTML]{B0B3B2}mp model   & \cellcolor[HTML]{B0B3B2}cu\_physics & \cellcolor[HTML]{B0B3B2}init. time \\
+\textbf{(1)1km ctl}      & \textbf{1km}                           & \textbf{5s}                      & \textbf{NAM}                  & \textbf{morr\_hail}                & \textbf{0}                          & \textbf{06-21: 00Z}                \\
+(2)                      & 1km                                    & 5s                               & {\color[HTML]{FE0000} GFS}    & morr\_hail                         & 0                                   & 06-21: 00Z                         \\
+(3)                      & 1km                                    & 5s                               & NAM                           & {\color[HTML]{FE0000} morr\_graup} & 0                                   & 06-21: 00Z                         \\
+(4)                      & 1km                                    & 5s                               & NAM                           & {\color[HTML]{FE0000} nssl}        & 0                                   & 06-21: 00Z                         \\
+(5)                      & 1km                                    & 5s                               & NAM                           & morr\_hail                         & {\color[HTML]{FE0000} 1}            & 06-21: 00Z                         \\
+(6)                      & 1km                                    & 5s                               & NAM                           & morr\_hail                         & 0                                   & {\color[HTML]{FE0000} 06-20: 00Z}  \\
+\textbf{(7)4km ctl}      & \textbf{4km}                           & \textbf{20s}                     & \textbf{NAM}                  & \textbf{morr\_hail}                & \textbf{0}                          & \textbf{06-21: 00Z}                \\
+(8)                      & 4km                                    & 20s                              & {\color[HTML]{FE0000} GFS}    & morr\_hail                         & 0                                   & 06-21: 00Z                         \\
+(9)                      & 4km                                    & 20s                              & NAM                           & {\color[HTML]{FE0000} morr\_graup} & 0                                   & 06-21: 00Z                         \\
+(10)                     & 4km                                    & 20s                              & NAM                           & {\color[HTML]{FE0000} nssl}        & 0                                   & 06-21: 00Z                         \\
+(11)                     & 4km                                    & 20s                              & NAM                           & morr\_hail                         & {\color[HTML]{FE0000} 1}            & 06-21: 00Z                         \\
+(l2)                     & 4km                                    & 20s                              & NAM                           & morr\_hail                         & 0                                   & {\color[HTML]{FE0000} 06-20: 00Z} 
+\end{tabular}
+\label{table:config}
+\end{table}
+
+
+
+
+
+
+
+
+
+
+% \begin{table}[H]
+% \centering
+% \caption{Statistic of lightning discharge produced by simulation members}
+% \begin{tabular}{ccccc}
+% mem\# & mean  & sum          & max  & timestep of max (dt=10min) \\
+% ( 1)  & 1.254 & 5.629179e+07 & 688  & 92                         \\
+% ( 2)  & 0.943 & 4.231822e+07 & 811  & 116                        \\
+% ( 3)  & 0     & 0            & 0    & /                          \\
+% ( 4)  & 5.098 & 2.289045e+08 & 4209 & 147                        \\
+% ( 5)  & 1.133 & 5.086445e+07 & 1140 & 36                         \\
+% ( 6)  & 0.752 & 5.748930e+07 & 660  & 282                        \\
+% ( 7)  & 0.019 & 8.234930e+05 & 82   & 131                        \\
+% ( 8)  & 0.017 & 7.311790e+05 & 35   & 133                        \\
+% ( 9)  & 0     & 0            & /    & /                          \\
+% (10)  & 0.292 & 1.287286e+07 & 194  & 142                        \\
+% (11)  & 0.01  & 4.298890e+05 & 39   & 131                        \\
+% (12)  & 0.01  & 7.593120e+05 &      & 279                       
+% \end{tabular}
+% \label{table:lgt_stat}
+% \end{table}
+
+\begin{table}[H]
+\centering
+\caption{Statistic of lightning discharge produced by simulation members}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+mem\# & mean  & sum          & max  & timestep of max (dt=10min) \\ \hline
+( 1)  & 1.254 & 5.629179e+07 & 688  & 92                         \\ \hline
+( 2)  & 0.943 & 4.231822e+07 & 811  & 116                        \\ \hline
+( 3)  & 0     & 0            & 0    & /                          \\ \hline
+( 4)  & 5.098 & 2.289045e+08 & 4209 & 147                        \\ \hline
+( 5)  & 1.133 & 5.086445e+07 & 1140 & 36                         \\ \hline
+( 6)  & 0.752 & 5.748930e+07 & 660  & 282                        \\ \hline
+( 7)  & 0.019 & 8.234930e+05 & 82   & 131                        \\ \hline
+( 8)  & 0.017 & 7.311790e+05 & 35   & 133                        \\ \hline
+( 9)  & 0     & 0            & /    & /                          \\ \hline
+(10)  & 0.292 & 1.287286e+07 & 194  & 142                        \\ \hline
+(11)  & 0.01  & 4.298890e+05 & 39   & 131                        \\ \hline
+(12)  & 0.01  & 7.593120e+05 &      & 279                        \\ \hline
+\end{tabular}
+\label{table:lgt_stat}
+\end{table}

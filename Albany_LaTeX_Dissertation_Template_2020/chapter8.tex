@@ -4,23 +4,17 @@
 %                                                                 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
  
-\chapter{Proposed Research}
+\chapter{Timeline}
 \resetfootnote %this command starts footnote numbering with 1 again.
 
 %---------------------------------------------------------------------------------------%
-\section{Overview}
-%---------------------------------------------------------------------------------------%
-
-Here is a file for your chapters.  Copy this file for each chapter 
-and change the titles.  Don't forget to add include statemets to 
-dissertation.tex.  
-You can use sections (as above).  
-You can add glossary terms like \gls{eregex} and acronyms like \glsname{SRE}.
-You can use footnotes.\footnote{Here is a footnote.}
-Don't forget to cite books~\cite{Sipser} and papers~\cite{CarleNarendran}.
-
-%---------------------------------------------------------------------------------------%
-\section{Model Setup}
-%---------------------------------------------------------------------------------------%
-
-Here is the content for section two.
+The work described in \ref{chap:discus} will be the focus of the remainder of the semester before the start of Spring 2022. After that, a research timeline is shown in \ref{fig:gantt}. 
+\begin{enumerate}[label=(\alph*)]
+    \item{Starting Spring 2022, the N2M charging scheme will be implemented into the original version of AHM (added shape-aware ice processes). This implementation will be guided by the extensive M2M implementation process and notes. Based on experience from implementation for M2M, this task requires extra time for debugging and tests for robustness and is expected to extend to mid Summer 2022.}
+    \item{Concurrent to WRF-ELEC implementation into the AHM, an idealized simulation will be used to test for model robustness. The Mid-latitude Continental Convective Clouds Experiment (MC3E) is a field campaign program from April 22 – June 6, 2011, near Lamont, Oklahoma, conducted by the U.S. Department of Energy Atmospheric Radiation Measurement Climate Research Facility and the NASA's Global Precipitation Measurement mission Ground Validation program. Lightning data from the OK-LMA located in Norman, OK is available for 3-D charge structure validation. Idealized simulations of MC3E has been conducted in \cite{sulia2021new}, and so the same model initialization will be used but subject to change during testing for optimal performance. This analysis will be performed starting Summer 2022 and be completed shortly after successfully electrifying AHM in mid Summer 2022.}
+    \item{Results from (a) and (b) be will be collected starting Summer 2022. After the model settings are finalized mid summer of 2022, a first publication draft is expected to be completed by the end of Summer 2022 for simulation results of MC3E electrification using AHM, focusing on the microphysics and electrification sensitivity to ice habit. Proposed sensitivity testing members are M2M, AHM-no-habit and AHM-habit. Though not the focus of the paper, the results will be validated against Dual-Polarization Radar products and OK-LMA, as well as potential data from TRMM-LIS and TMI. The review process is expected to extend into Fall 2022 resulting in publication by the end of 2022.}
+    \item{Another chapter of the research project will start in Fall 2022. Implementation of shape-aware riming scheme (\cite{jensen2015modeling}) previously implemented into another version of AHM will be implemented into the version developed in (a) with electrification. Meanwhile, shape-aware snow aggregation scheme built upon \cite{przybylo2019ice} and already implemented current version of AHM in WRF (\cite{sulia2021new}) will be added to the electrified version as well. The implementation of riming is expected to take major effort given the deviation of the version of AHM within which it is currently implemented. It is expected that the riming and aggregation schemes are successfully implemented by mid Spring 2023.}
+    \item{Starting Spring 2023, simulations will be performed on the same storm case (MC3E) using the improved version of AHM. Results of sensitivity to ice habit, riming, and aggregation will be investigated. This comprehensive analysis process requires extra time for learning of new analysis techniques and interpretation of interacting model elements, and is expected to extend to mid Summer 2023.}
+    \item{First draft of results from (e) will be submitted by mid Summer 2023, leaving about half semester for review.}
+    \item{Publication of (c) and (f) will be organized contiuously to convey the story of how electrification is coupled with ice development of different stages using numerical modeling as technique for physical interpretation. Expected finalization of the dissertation document and defense are expected at the end of Summer 2023.}
+\end{enumerate}
